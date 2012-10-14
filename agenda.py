@@ -171,6 +171,7 @@ class Ui_Form(object):
         self.btnNuevo.setIcon(icon1)
         self.btnNuevo.setObjectName("btnNuevo")
         self.btnModificar = QtGui.QPushButton(self.widget)
+        self.btnModificar.setEnabled(False)
         self.btnModificar.setGeometry(QtCore.QRect(110, 10, 91, 41))
         self.btnModificar.setLayoutDirection(QtCore.Qt.LeftToRight)
         icon2 = QtGui.QIcon()
@@ -184,13 +185,13 @@ class Ui_Form(object):
         icon3.addPixmap(QtGui.QPixmap("img/30px_1 (514).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnEliminar.setIcon(icon3)
         self.btnEliminar.setObjectName("btnEliminar")
-        self.btnLimpiar = QtGui.QPushButton(self.widget)
-        self.btnLimpiar.setGeometry(QtCore.QRect(310, 10, 91, 41))
-        self.btnLimpiar.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.btnDeshacer = QtGui.QPushButton(self.widget)
+        self.btnDeshacer.setGeometry(QtCore.QRect(310, 10, 91, 41))
+        self.btnDeshacer.setLayoutDirection(QtCore.Qt.LeftToRight)
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("img/erase.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btnLimpiar.setIcon(icon4)
-        self.btnLimpiar.setObjectName("btnLimpiar")
+        icon4.addPixmap(QtGui.QPixmap("img/40px_reload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnDeshacer.setIcon(icon4)
+        self.btnDeshacer.setObjectName("btnDeshacer")
         self.btnSalir = QtGui.QPushButton(self.widget)
         self.btnSalir.setGeometry(QtCore.QRect(510, 10, 91, 41))
         self.btnSalir.setLayoutDirection(QtCore.Qt.LeftToRight)
@@ -198,6 +199,13 @@ class Ui_Form(object):
         icon5.addPixmap(QtGui.QPixmap("img/25px_exit.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnSalir.setIcon(icon5)
         self.btnSalir.setObjectName("btnSalir")
+        self.btnLimpiar = QtGui.QPushButton(self.widget)
+        self.btnLimpiar.setGeometry(QtCore.QRect(410, 10, 91, 41))
+        self.btnLimpiar.setLayoutDirection(QtCore.Qt.LeftToRight)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap("img/erase.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnLimpiar.setIcon(icon6)
+        self.btnLimpiar.setObjectName("btnLimpiar")
         self.frame = QtGui.QFrame(Form)
         self.frame.setGeometry(QtCore.QRect(0, 80, 601, 71))
         palette = QtGui.QPalette()
@@ -365,7 +373,6 @@ class Ui_Form(object):
         self.txtTelefono = QtGui.QLineEdit(self.frame)
         self.txtTelefono.setGeometry(QtCore.QRect(430, 40, 161, 23))
         self.txtTelefono.setObjectName("txtTelefono")
-        
         self.tableWidget = QtGui.QTableWidget(Form)
         self.tableWidget.setGeometry(QtCore.QRect(10, 170, 581, 291))
         palette = QtGui.QPalette()
@@ -389,42 +396,87 @@ class Ui_Form(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Highlight, brush)
         self.tableWidget.setPalette(palette)
         self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
-        self.tableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectItems)
+        self.tableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(0)
         self.tableWidget.setRowCount(0)
+
         self.retranslateUi(Form)
-        QtCore.QObject.connect(self.btnNuevo, QtCore.SIGNAL("clicked()"), Form.close)
-        QtCore.QObject.connect(self.btnModificar, QtCore.SIGNAL("clicked()"), Form.close)
-        QtCore.QObject.connect(self.btnEliminar, QtCore.SIGNAL("clicked()"), Form.close)
-        QtCore.QObject.connect(self.btnLimpiar, QtCore.SIGNAL("clicked()"), Form.close)
+
+        #hasta aqui
+        QtCore.QObject.connect(self.btnNuevo, QtCore.SIGNAL("clicked()"), self.Nuevo)
+        QtCore.QObject.connect(self.btnModificar, QtCore.SIGNAL("clicked()"), self.Modificar)
+        QtCore.QObject.connect(self.btnEliminar, QtCore.SIGNAL("clicked()"), self.Eliminar)
+        QtCore.QObject.connect(self.btnDeshacer, QtCore.SIGNAL("clicked()"), self.Deshacer)
+        QtCore.QObject.connect(self.btnLimpiar, QtCore.SIGNAL("clicked()"), self.limpiar_text)
+        QtCore.QObject.connect(self.btnSalir, QtCore.SIGNAL("clicked()"), Form.close)
         QtCore.QObject.connect(self.txtNombre, QtCore.SIGNAL("textChanged(QString)"), self.Buscar)
         QtCore.QObject.connect(self.txtDepartamento, QtCore.SIGNAL("textChanged(QString)"), self.Buscar)
         QtCore.QObject.connect(self.txtTelefono, QtCore.SIGNAL("textChanged(QString)"), self.Buscar)
+        QtCore.QObject.connect(self.tableWidget, QtCore.SIGNAL("itemClicked(QTableWidgetItem*)"), self.clickEnTabla)
         
-        QtCore.QMetaObject.connectSlotsByName(Form)
+
         Form.setTabOrder(self.btnNuevo, self.btnModificar)
         Form.setTabOrder(self.btnModificar, self.btnEliminar)
-        Form.setTabOrder(self.btnEliminar, self.btnLimpiar)
+        Form.setTabOrder(self.btnEliminar, self.btnDeshacer)
+        Form.setTabOrder(self.btnDeshacer, self.btnLimpiar)
         Form.setTabOrder(self.btnLimpiar, self.btnSalir)
-        
+        Form.setTabOrder(self.btnSalir, self.txtId)
+        Form.setTabOrder(self.txtId, self.txtNombre)
+        Form.setTabOrder(self.txtNombre, self.txtDepartamento)
+        Form.setTabOrder(self.txtDepartamento, self.txtTelefono)
+        Form.setTabOrder(self.txtTelefono, self.tableWidget)
+
     def retranslateUi(self, Form):
         Form.setWindowTitle(QtGui.QApplication.translate("Form", "Agenda Telefonica Hospital Coromoto", None, QtGui.QApplication.UnicodeUTF8))
         self.btnNuevo.setText(QtGui.QApplication.translate("Form", "&Nuevo", None, QtGui.QApplication.UnicodeUTF8))
         self.btnModificar.setText(QtGui.QApplication.translate("Form", "&Modificar", None, QtGui.QApplication.UnicodeUTF8))
         self.btnEliminar.setText(QtGui.QApplication.translate("Form", "&Eliminar", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnLimpiar.setText(QtGui.QApplication.translate("Form", "&Limpiar", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnDeshacer.setText(QtGui.QApplication.translate("Form", "&Deshacer", None, QtGui.QApplication.UnicodeUTF8))
         self.btnSalir.setText(QtGui.QApplication.translate("Form", "&Salir", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnLimpiar.setText(QtGui.QApplication.translate("Form", "&Limpiar", None, QtGui.QApplication.UnicodeUTF8))
         self.lblId.setText(QtGui.QApplication.translate("Form", "ID", None, QtGui.QApplication.UnicodeUTF8))
         self.lblNombre.setText(QtGui.QApplication.translate("Form", "Nombre", None, QtGui.QApplication.UnicodeUTF8))
         self.lblDepartamento.setText(QtGui.QApplication.translate("Form", "Departamento", None, QtGui.QApplication.UnicodeUTF8))
         self.lblTelefono.setText(QtGui.QApplication.translate("Form", "Telefono", None, QtGui.QApplication.UnicodeUTF8))
 
-        #Desde Aqui se inserta mi codigo
-        lista = self.Buscar()  # Obtener los registros de PostgreSQL
-        #print lista
-        self.PrepararTableWidget(len(lista))  # Configurar el tableWidget
-        self.InsertarRegistros(lista)  # Insertar los Registros en el TableWidget
+
+        host,  db, user, clave = fc.opcion_consultar('POSTGRESQL')
+        self.cadconex = "host='%s' dbname='%s' user='%s' password='%s'" % (host[1], db[1], user[1], clave[1])
+ 
+        self.activarBuscar = True
+        self.banderaNuevo = True
+
+        self.Buscar()
+        self.deshabilitar_botones()
+
+    def Buscar(self):
+        '''
+        '''
+        print self.activarBuscar
+
+        if self.activarBuscar:
+            cadsq = self.armar_select()
+            lista = self.obtener_datos(cadsq)
+            self.PrepararTableWidget(len(lista))  # Configurar el tableWidget
+            self.InsertarRegistros(lista)  # Insertar los Registros en el TableWidget
+
+    def armar_select(self):
+        '''
+        
+        '''
+
+        lcNombre = self.txtNombre.text()
+        lcDepartamento = self.txtDepartamento.text()
+        lcTelefono = self.txtTelefono.text()
+
+        valorNombre =  "upper(nombre) like '%%%s%%' AND " % (lcNombre.upper()) if lcNombre else ''
+        valorDepartamento =  " upper(departamento) like '%%%s%%' AND " % (lcDepartamento.upper()) if lcDepartamento else ''
+        valorTelefono = " telefono like '%%%s%%' AND " % (lcTelefono) if lcTelefono else ''
+
+        campos = valorNombre + valorDepartamento + valorTelefono
+        cadenaSql = 'select id,nombre,departamento,telefono from agenda where ' + campos + 'del = 0 order by nombre'
+        return cadenaSql
 
     def PrepararTableWidget(self, CantidadReg=0):
         '''
@@ -486,7 +538,6 @@ class Ui_Form(object):
             for posc, columna in enumerate(fila):
                 self.tableWidget.setItem(pos, posc, QtGui.QTableWidgetItem(str(columna)))
 
-
     def obtener_datos(self, cadena_pasada):
         host,  db, user, clave = fc.opcion_consultar('POSTGRESQL')
         cadconex = "host='%s' dbname='%s' user='%s' password='%s'" % (host[1], db[1], user[1], clave[1])
@@ -501,21 +552,134 @@ class Ui_Form(object):
             self.registros = []
         return self.registros
 
+    def limpiar_text(self):
+        self.txtId.clear()
+        self.txtNombre.clear()
+        self.txtDepartamento.clear()
+        self.txtTelefono.clear()
+        self.activarBuscar = True
+
+    def deshabilitar_botones(self):
+        self.btnModificar.setEnabled(False)
+        self.btnEliminar.setEnabled(False)
+        self.btnDeshacer.setEnabled(False)
 
     def deshabilitar(self):
         self.txtId.setEnabled(False)
-        self.txtNombres.setEnabled(False)
+        self.txtNombre.setEnabled(False)
         self.txtDepartamento.setEnabled(False)
         self.txtTelefono.setEnabled(False)
 
         self.btnGuardar.setEnabled(False)
 
+    def clickEnTabla(self):
+        '''
+        Este metodo se activa al momento de hace click en el tableWidget y permite
+        mostrar el contenido de los campos de la fila seleccionada en el tableWidget
+        en los textbox bien sea para Verlos, modificarlos o Eliminarlos
+        '''
+
+        self.activarBuscar = False
+        
+        fila = self.tableWidget.currentRow()
+        #total_columnas = self.tableWidget.columnCount()
+        
+        id = self.tableWidget.item(fila, 0).text()
+        nombre = self.tableWidget.item(fila, 1).text()
+        dpto = self.tableWidget.item(fila, 2).text()
+        tlf = self.tableWidget.item(fila, 3).text()
+
+        self.txtId.setText(id)
+        self.txtNombre.setText(nombre)
+        self.txtDepartamento.setText(dpto)
+        self.txtTelefono.setText(tlf) 
+
+        '''
+        for columna in range(total_columnas):
+            itenactual = self.tableWidget.item(fila, columna)
+            c = itenactual.text()
+            #self.txtId.setText(c
+        '''
 
     def Nuevo(self):
-
+        '''
+        El metodo nuevo cumple dos funciones, una es de boton nuevo y otra es de boton guardar,
+        la Variables self.banderaNuevo es el swith que me permite saber cuando el 
+        boton nuevo hace la funcion de nuevo o de guardar, cuando la variable
+        banderaNuevo es True entonces el boton debe actuar como Boton Nuevo de
+        lo contrario cuando banderaNuevo es false entonces el boton nuevo debe 
+        actuar como boton Guardar
+        
         lcMensaje = 'Hola'  # self.combo.currentText()
         msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Titulo',lcMensaje)
         msgBox.exec_()
+        '''
+
+        if self.banderaNuevo:
+            #Limpar los TextBox
+            self.limpiar_text()
+
+            #Desactivar la Busqueda al escribir el los textbox
+            self.activarBuscar = False
+
+            #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo o Como Boton Guardar
+            self.banderaNuevo = False
+            
+            #Deshabilitar y Habilitar botonoes
+            self.btnModificar.setEnabled(False)
+            self.btnEliminar.setEnabled(False)
+            self.btnLimpiar.setEnabled(False)
+            self.btnDeshacer.setEnabled(True)
+            
+            #Cambiar el Caption o Text del Boton
+            self.btnNuevo.setText("&Guardar")
+            
+            #Cambiar icono del Boton Nuevo  de Nuevo por Guardar
+            icon1 = QtGui.QIcon()
+            icon1.addPixmap(QtGui.QPixmap("img/40px_3floppy_unmount.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            self.btnNuevo.setIcon(icon1)
+
+            self.txtNombre.setFocus()
+
+        else:
+            #Activar la Busqueda al escribir el los textbox
+            self.activarBuscar = True
+
+            #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo o Como Boton Guardar
+            self.banderaNuevo = True
+            
+            #Deshabilitar y Habilitar botonoes
+            self.btnModificar.setEnabled(False)
+            self.btnEliminar.setEnabled(False)
+            self.btnLimpiar.setEnabled(True)
+            self.btnDeshacer.setEnabled(False)
+
+            #Cambiar el Caption o Text del Boton
+            self.btnNuevo.setText("&Nuevo")
+ 
+            #Cambiar icono del Boton Nuevo  de Guardar por Nuevo
+            icon1 = QtGui.QIcon()
+            icon1.addPixmap(QtGui.QPixmap("img/30px-Crystal_Clear_app_List_manager.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            self.btnNuevo.setIcon(icon1)
+
+            #Ejecurar sentencia SQL para guardar en PostGreSQL
+            nombre = self.txtNombre.text()
+            dpto = self.txtDepartamento.text()
+            telf = self.txtTelefono.text()
+
+            sqlInsert = " insert into agenda (nombre, departamento, telefono) values ('%s', '%s', '%s') " % (nombre, dpto, telf)
+            
+            try:
+                pg = ConectarPG(self.cadconex)
+                print sqlInsert
+                pg.ejecutar(sqlInsert)
+                pg.conn.commit()
+
+                lcMensaje = 'Registro Guardaro Satisfactoriamente'  # self.combo.currentText()
+                msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Felicidades',lcMensaje)
+                msgBox.exec_()
+            except:
+                print exceptionValue
 
     def Guardar(self):
         msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Titulo', 'Prueba')
@@ -531,29 +695,13 @@ class Ui_Form(object):
         msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Titulo',lcMensaje)
         msgBox.exec_()
 
-    def Buscar(self):
-        lcNombre = self.txtNombre.text()
-        lcDepartamento = self.txtDepartamento.text()
-        lcTelefono = self.txtTelefono.text()
-
-        valorNombre =  "upper(nombre) like '%%%s%%' AND " % (lcNombre.upper()) if lcNombre else ''
-        valorDepartamento =  " upper(departamento) like '%%%s%%' AND " % (lcDepartamento.upper()) if lcDepartamento else ''
-        valorTelefono = " telefono like '%%%s%%' AND " % (lcTelefono) if lcTelefono else ''
-
-        campos = valorNombre + valorDepartamento + valorTelefono
-        cadenaSql = 'select id,nombre,departamento,telefono from agenda where ' + campos + 'del = 0 order by nombre'
-        registros = self.obtener_datos(cadenaSql)
-        
-        return registros
-
-
     def Modificar(self):
         pass
 
     def Eliminar(self):
         pass
 
-    def Limpiar(self):
+    def Deshacer(self):
         pass
 
     def salir(self):

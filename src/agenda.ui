@@ -465,6 +465,9 @@
     </property>
    </widget>
    <widget class="QPushButton" name="btnModificar">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -504,7 +507,7 @@
       <normaloff>../img/30px_1 (514).png</normaloff>../img/30px_1 (514).png</iconset>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnLimpiar">
+   <widget class="QPushButton" name="btnDeshacer">
     <property name="geometry">
      <rect>
       <x>310</x>
@@ -517,11 +520,11 @@
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>&amp;Limpiar</string>
+     <string>&amp;Deshacer</string>
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../img/erase.png</normaloff>../img/erase.png</iconset>
+      <normaloff>../img/40px_reload.png</normaloff>../img/40px_reload.png</iconset>
     </property>
    </widget>
    <widget class="QPushButton" name="btnSalir">
@@ -542,6 +545,26 @@
     <property name="icon">
      <iconset>
       <normaloff>../img/25px_exit.png</normaloff>../img/25px_exit.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnLimpiar">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>10</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text">
+     <string>&amp;Limpiar</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../img/erase.png</normaloff>../img/erase.png</iconset>
     </property>
    </widget>
   </widget>
@@ -1010,124 +1033,6 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="palette">
-     <palette>
-      <active>
-       <colorrole role="Light">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>85</green>
-          <blue>127</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="BrightText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Base">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="NoRole">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </active>
-      <inactive>
-       <colorrole role="Light">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>85</green>
-          <blue>127</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="BrightText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Base">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="NoRole">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </inactive>
-      <disabled>
-       <colorrole role="Light">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>85</green>
-          <blue>127</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="BrightText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Base">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>220</red>
-          <green>222</green>
-          <blue>200</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="NoRole">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </disabled>
-     </palette>
-    </property>
    </widget>
    <widget class="QLabel" name="lblNombre">
     <property name="geometry">
@@ -1274,8 +1179,14 @@
   <tabstop>btnNuevo</tabstop>
   <tabstop>btnModificar</tabstop>
   <tabstop>btnEliminar</tabstop>
+  <tabstop>btnDeshacer</tabstop>
   <tabstop>btnLimpiar</tabstop>
   <tabstop>btnSalir</tabstop>
+  <tabstop>txtId</tabstop>
+  <tabstop>txtNombre</tabstop>
+  <tabstop>txtDepartamento</tabstop>
+  <tabstop>txtTelefono</tabstop>
+  <tabstop>tableWidget</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -1283,7 +1194,7 @@
    <sender>btnNuevo</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
-   <slot>close()</slot>
+   <slot>deleteLater()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>55</x>
@@ -1328,7 +1239,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnLimpiar</sender>
+   <sender>btnDeshacer</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
    <slot>close()</slot>
@@ -1340,6 +1251,54 @@
     <hint type="destinationlabel">
      <x>300</x>
      <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSalir</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>555</x>
+     <y>30</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>itemClicked(QTableWidgetItem*)</signal>
+   <receiver>Form</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>315</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnLimpiar</sender>
+   <signal>clicked()</signal>
+   <receiver>btnLimpiar</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>455</x>
+     <y>30</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>455</x>
+     <y>30</y>
     </hint>
    </hints>
   </connection>
