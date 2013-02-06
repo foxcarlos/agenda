@@ -9,6 +9,11 @@
 
 import sys
 from PySide import QtCore, QtGui
+from rutinas.varias import *
+
+ruta_arch_conf = os.path.dirname(sys.argv[0])
+archivo_configuracion = os.path.join(ruta_arch_conf, 'agenda.conf')
+fc = FileConfig(archivo_configuracion)
 
 
 class Ui_Form(object):
@@ -381,6 +386,8 @@ class Ui_Form(object):
         lista = ((0, 'Carlos Garcia', 'Sistemas', '41075'), (1, 'Nairesther Gomez', 'Docencia', '41075'))
         cabecera = ["ID", "Nombre", "Departamento", "Telefono"]
 
+        lista = self.cargardatos()
+ 
         self.tableWidget = QtGui.QTableWidget(Form)
         self.tableWidget.setColumnCount(len(cabecera))
         self.tableWidget.setGeometry(QtCore.QRect(10, 170, 581, 291))
@@ -422,12 +429,9 @@ class Ui_Form(object):
         for pos, fila in enumerate(lista):
             for posc, columna in enumerate(fila):
                 self.tableWidget.setItem(pos, posc, QtGui.QTableWidgetItem(str(columna)))
-                print pos, posc, columna
+                #print pos, posc, columna
 
         #self.tableWidget.resizeColumnsToContents()
-
-
-
         #self.combo = QtGui.QComboBox(Form)
         #self.combo.setGeometry(QtCore.QRect(20, 180, 131, 27))
         #self.combo.setObjectName("combo")        
@@ -435,7 +439,6 @@ class Ui_Form(object):
         #ciudades = ["Valencia","Maracay","Barquisimeto","Merida","Caracas"]
         #self.combo.addItems(ciudades)
         #deshabilitar()
-
 
         self.retranslateUi(Form)
         QtCore.QObject.connect(self.btnNuevo, QtCore.SIGNAL("clicked()"), self.Nuevo)
@@ -446,6 +449,20 @@ class Ui_Form(object):
         QtCore.QObject.connect(self.btnSalir, QtCore.SIGNAL("clicked()"), self.salir)
         QtCore.QMetaObject.connectSlotsByName(Form)
     
+    def cargardatos(self, cadena=''):
+        host,  db, user, clave = fc.opcion_consultar('POSTGRESQL')
+        cadconex = "host='%s' dbname='%s' user='%s' password='%s'" % (host[1], db[1], user[1], clave[1])
+        try:
+            pg = ConectarPG(cadconex)        
+            cad_sql = "select id,nombre,departamento,telefono from agenda where del = 0 "
+            self.registros = pg.ejecutar(cad_sql)
+            pg.cur.close()
+            pg.conn.close()
+        except:
+            self.registros = []
+        return self.registros
+
+
     def deshabilitar(self):
         self.txtId.setEnabled(False)
         self.txtNombres.setEnabled(False)
