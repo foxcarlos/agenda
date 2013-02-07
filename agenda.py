@@ -18,10 +18,12 @@ fc = FileConfig(archivo_configuracion)
 
 class Ui_Form(object):
     def setupUi(self, Form):
+        '''
+        '''
         Form.setObjectName("Form")
         Form.resize(602, 491)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("img/agenda.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off) 
+        icon.addPixmap(QtGui.QPixmap("img/agenda.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Form.setWindowIcon(icon)
         self.widget = QtGui.QWidget(Form)
         self.widget.setGeometry(QtCore.QRect(0, 0, 611, 61))
@@ -167,43 +169,36 @@ class Ui_Form(object):
         self.btnNuevo = QtGui.QPushButton(self.widget)
         self.btnNuevo.setGeometry(QtCore.QRect(10, 10, 91, 41))
         self.btnNuevo.setLayoutDirection(QtCore.Qt.LeftToRight)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("/media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Nuevo registro o documento/30px-Crystal_Clear_app_List_manager.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btnNuevo.setIcon(icon)
-        self.btnNuevo.setObjectName("btnNuevo")
-        self.btnGuardar = QtGui.QPushButton(self.widget)
-        self.btnGuardar.setGeometry(QtCore.QRect(110, 10, 91, 41))
-        self.btnGuardar.setLayoutDirection(QtCore.Qt.LeftToRight)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("/media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Grabar registro o documento/40px_3floppy_unmount.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btnGuardar.setIcon(icon1)
-        self.btnGuardar.setObjectName("btnGuardar")
+        icon1.addPixmap(QtGui.QPixmap("img/30px-Crystal_Clear_app_List_manager.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnNuevo.setIcon(icon1)
+        self.btnNuevo.setObjectName("btnNuevo")
         self.btnModificar = QtGui.QPushButton(self.widget)
-        self.btnModificar.setGeometry(QtCore.QRect(210, 10, 91, 41))
+        self.btnModificar.setGeometry(QtCore.QRect(110, 10, 91, 41))
         self.btnModificar.setLayoutDirection(QtCore.Qt.LeftToRight)
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("/media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Editar o modificar/30px-Crystal_Clear_app_kedit.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap("img/30px-Crystal_Clear_app_kedit.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnModificar.setIcon(icon2)
         self.btnModificar.setObjectName("btnModificar")
         self.btnEliminar = QtGui.QPushButton(self.widget)
-        self.btnEliminar.setGeometry(QtCore.QRect(310, 10, 91, 41))
+        self.btnEliminar.setGeometry(QtCore.QRect(210, 10, 91, 41))
         self.btnEliminar.setLayoutDirection(QtCore.Qt.LeftToRight)
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("/media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Eliminar registro o documento/30px_1 (514).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(QtGui.QPixmap("img/30px_1 (514).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnEliminar.setIcon(icon3)
         self.btnEliminar.setObjectName("btnEliminar")
         self.btnBuscar = QtGui.QPushButton(self.widget)
-        self.btnBuscar.setGeometry(QtCore.QRect(410, 10, 91, 41))
+        self.btnBuscar.setGeometry(QtCore.QRect(310, 10, 91, 41))
         self.btnBuscar.setLayoutDirection(QtCore.Qt.LeftToRight)
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("/media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Buscar registro o codumento/40px_find.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon4.addPixmap(QtGui.QPixmap("img/erase.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnBuscar.setIcon(icon4)
         self.btnBuscar.setObjectName("btnBuscar")
         self.btnSalir = QtGui.QPushButton(self.widget)
         self.btnSalir.setGeometry(QtCore.QRect(510, 10, 91, 41))
         self.btnSalir.setLayoutDirection(QtCore.Qt.LeftToRight)
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("/media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Salir o desactivar/25px_exit.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon5.addPixmap(QtGui.QPixmap("img/25px_exit.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnSalir.setIcon(icon5)
         self.btnSalir.setObjectName("btnSalir")
         self.frame = QtGui.QFrame(Form)
@@ -362,7 +357,8 @@ class Ui_Form(object):
         self.txtNombres = QtGui.QTextEdit(self.frame)
         self.txtNombres.setGeometry(QtCore.QRect(70, 30, 161, 27))
         self.txtNombres.setObjectName("txtNombres")
-        
+        self.txtNombres.setTabChangesFocus(True)
+
         self.lblNombres = QtGui.QLabel(self.frame)
         self.lblNombres.setGeometry(QtCore.QRect(70, 10, 62, 15))
         self.lblNombres.setObjectName("lblNombres")
@@ -442,11 +438,11 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
         QtCore.QObject.connect(self.btnNuevo, QtCore.SIGNAL("clicked()"), self.Nuevo)
-        QtCore.QObject.connect(self.btnGuardar, QtCore.SIGNAL("clicked()"), self.Guardar)
         QtCore.QObject.connect(self.btnModificar, QtCore.SIGNAL("clicked()"), self.Modificar)
         QtCore.QObject.connect(self.btnEliminar, QtCore.SIGNAL("clicked()"), self.Eliminar)
-        QtCore.QObject.connect(self.btnBuscar, QtCore.SIGNAL("clicked()"), self.Buscar)
+        QtCore.QObject.connect(self.btnBuscar, QtCore.SIGNAL("clicked()"), self.Limpiar)
         QtCore.QObject.connect(self.btnSalir, QtCore.SIGNAL("clicked()"), self.salir)
+        QtCore.QObject.connect(self.txtNombres, QtCore.SIGNAL("textChanged()"), self.Buscar)
         QtCore.QMetaObject.connectSlotsByName(Form)
     
     def cargardatos(self, cadena=''):
@@ -487,13 +483,19 @@ class Ui_Form(object):
         print GuardarButton
         print AbortarButton
 
+    def Buscar(self):
+        #valor = self.txtNombres.text()
+        valor = self.txtNombres.toPlainText()
+        print valor
+        #msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Titulo', 'Prueba')
+
     def Modificar(self):
         pass
 
     def Eliminar(self):
         pass
 
-    def Buscar(self):
+    def Limpiar(self):
         pass
     
     def salir(self):
@@ -503,16 +505,14 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QtGui.QApplication.translate("Form", "Agenda Telefonica Hospital Coromoto", None, QtGui.QApplication.UnicodeUTF8))
         self.btnNuevo.setText(QtGui.QApplication.translate("Form", "&Nuevo", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnGuardar.setText(QtGui.QApplication.translate("Form", "Guardar", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnModificar.setText(QtGui.QApplication.translate("Form", "Modificar", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnEliminar.setText(QtGui.QApplication.translate("Form", "Eliminar", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnBuscar.setText(QtGui.QApplication.translate("Form", "Buscar", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnSalir.setText(QtGui.QApplication.translate("Form", "Salir", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnModificar.setText(QtGui.QApplication.translate("Form", "&Modificar", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnEliminar.setText(QtGui.QApplication.translate("Form", "&Eliminar", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnBuscar.setText(QtGui.QApplication.translate("Form", "&Limpiar", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnSalir.setText(QtGui.QApplication.translate("Form", "&Salir", None, QtGui.QApplication.UnicodeUTF8))
         self.lblId.setText(QtGui.QApplication.translate("Form", "ID", None, QtGui.QApplication.UnicodeUTF8))
         self.lblNombres.setText(QtGui.QApplication.translate("Form", "Nombres", None, QtGui.QApplication.UnicodeUTF8))
         self.lblDepartamento.setText(QtGui.QApplication.translate("Form", "Departamento", None, QtGui.QApplication.UnicodeUTF8))
         self.lblTelefono.setText(QtGui.QApplication.translate("Form", "Telefono", None, QtGui.QApplication.UnicodeUTF8))
-
 
 
 class ControlMainWindow(QtGui.QMainWindow):

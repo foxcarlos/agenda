@@ -457,14 +457,14 @@
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>Nuevo</string>
+     <string>&amp;Nuevo</string>
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Nuevo registro o documento/30px-Crystal_Clear_app_List_manager.png</normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Nuevo registro o documento/30px-Crystal_Clear_app_List_manager.png</iconset>
+      <normaloff>../../imagenes/iconosfox/Nuevo_registro_o_documento/30px-Crystal_Clear_app_List_manager.png</normaloff>../../imagenes/iconosfox/Nuevo_registro_o_documento/30px-Crystal_Clear_app_List_manager.png</iconset>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnGuardar">
+   <widget class="QPushButton" name="btnModificar">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -477,14 +477,14 @@
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>Guardar</string>
+     <string>&amp;Modificar</string>
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Grabar registro o documento/40px_3floppy_unmount.png</normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Grabar registro o documento/40px_3floppy_unmount.png</iconset>
+      <normaloff>../../imagenes/iconosfox/Editar_o_modificar/30px-Crystal_Clear_app_kedit.png</normaloff>../../imagenes/iconosfox/Editar_o_modificar/30px-Crystal_Clear_app_kedit.png</iconset>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnModificar">
+   <widget class="QPushButton" name="btnEliminar">
     <property name="geometry">
      <rect>
       <x>210</x>
@@ -497,14 +497,14 @@
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>Modificar</string>
+     <string>&amp;Eliminar</string>
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Editar o modificar/30px-Crystal_Clear_app_kedit.png</normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Editar o modificar/30px-Crystal_Clear_app_kedit.png</iconset>
+      <normaloff>../../imagenes/iconosfox/Eliminar_registro_o_documento/30px_1 (514).png</normaloff>../../imagenes/iconosfox/Eliminar_registro_o_documento/30px_1 (514).png</iconset>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnEliminar">
+   <widget class="QPushButton" name="btnLimpiar">
     <property name="geometry">
      <rect>
       <x>310</x>
@@ -517,38 +517,18 @@
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>Eliminar</string>
+     <string>&amp;Limpiar</string>
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Eliminar registro o documento/30px_1 (514).png</normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Eliminar registro o documento/30px_1 (514).png</iconset>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnBuscar">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>10</y>
-      <width>91</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="text">
-     <string>Buscar</string>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Buscar registro o codumento/40px_find.png</normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Buscar registro o codumento/40px_find.png</iconset>
+      <normaloff>../../imagenes/iconosfox/Eliminar_registro_o_documento/erase.png</normaloff>../../imagenes/iconosfox/Eliminar_registro_o_documento/erase.png</iconset>
     </property>
    </widget>
    <widget class="QPushButton" name="btnSalir">
     <property name="geometry">
      <rect>
       <x>510</x>
-      <y>10</y>
+      <y>-10</y>
       <width>91</width>
       <height>41</height>
      </rect>
@@ -557,11 +537,11 @@
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>Salir</string>
+     <string>&amp;Salir</string>
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Salir o desactivar/25px_exit.png</normaloff>../../../../../media/serv_coromoto/sishc/imag/Nuevosiconospropuestos/Salir o desactivar/25px_exit.png</iconset>
+      <normaloff>../../imagenes/iconosfox/Salir_o_desactivar/25px_exit.png</normaloff>../../imagenes/iconosfox/Salir_o_desactivar/25px_exit.png</iconset>
     </property>
    </widget>
   </widget>
@@ -1033,6 +1013,9 @@
       <height>27</height>
      </rect>
     </property>
+    <property name="tabChangesFocus">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="lblNombres">
     <property name="geometry">
@@ -1094,23 +1077,13 @@
     </property>
    </widget>
   </widget>
-  <widget class="QComboBox" name="combo">
-   <property name="geometry">
-    <rect>
-     <x>460</x>
-     <y>470</y>
-     <width>131</width>
-     <height>27</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>180</y>
-     <width>531</width>
-     <height>261</height>
+     <x>10</x>
+     <y>170</y>
+     <width>581</width>
+     <height>301</height>
     </rect>
    </property>
    <property name="palette">
@@ -1134,15 +1107,6 @@
         </color>
        </brush>
       </colorrole>
-      <colorrole role="AlternateBase">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>203</blue>
-        </color>
-       </brush>
-      </colorrole>
      </active>
      <inactive>
       <colorrole role="Base">
@@ -1160,15 +1124,6 @@
          <red>254</red>
          <green>206</green>
          <blue>45</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="AlternateBase">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>203</blue>
         </color>
        </brush>
       </colorrole>
@@ -1192,20 +1147,8 @@
         </color>
        </brush>
       </colorrole>
-      <colorrole role="AlternateBase">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>203</blue>
-        </color>
-       </brush>
-      </colorrole>
      </disabled>
     </palette>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
    </property>
    <property name="alternatingRowColors">
     <bool>true</bool>
@@ -1216,26 +1159,6 @@
    <property name="selectionBehavior">
     <enum>QAbstractItemView::SelectRows</enum>
    </property>
-   <property name="rowCount">
-    <number>10</number>
-   </property>
-   <property name="columnCount">
-    <number>4</number>
-   </property>
-   <row/>
-   <row/>
-   <row/>
-   <row/>
-   <row/>
-   <row/>
-   <row/>
-   <row/>
-   <row/>
-   <row/>
-   <column/>
-   <column/>
-   <column/>
-   <column/>
   </widget>
  </widget>
  <resources/>
@@ -1257,7 +1180,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnGuardar</sender>
+   <sender>btnModificar</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
    <slot>close()</slot>
@@ -1273,7 +1196,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnModificar</sender>
+   <sender>btnEliminar</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
    <slot>close()</slot>
@@ -1289,29 +1212,13 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnEliminar</sender>
+   <sender>btnLimpiar</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>355</x>
-     <y>30</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>300</x>
-     <y>245</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnBuscar</sender>
-   <signal>clicked()</signal>
-   <receiver>Form</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>455</x>
      <y>30</y>
     </hint>
     <hint type="destinationlabel">
@@ -1333,6 +1240,22 @@
     <hint type="destinationlabel">
      <x>300</x>
      <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>txtNombres</sender>
+   <signal>textChanged()</signal>
+   <receiver>txtNombres</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>123</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>150</x>
+     <y>123</y>
     </hint>
    </hints>
   </connection>
