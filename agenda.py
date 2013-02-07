@@ -454,7 +454,7 @@ class Ui_Form(object):
         cadconex = "host='%s' dbname='%s' user='%s' password='%s'" % (host[1], db[1], user[1], clave[1])
         try:
             pg = ConectarPG(cadconex)        
-            cad_sql = "select id,nombre,departamento,telefono from agenda where del = 0 "
+            cad_sql = "select id,nombre,departamento,telefono from agenda where del = 0 order by nombre"
             self.registros = pg.ejecutar(cad_sql)
             pg.cur.close()
             pg.conn.close()
