@@ -461,7 +461,7 @@
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../../imagenes/iconosfox/Nuevo_registro_o_documento/30px-Crystal_Clear_app_List_manager.png</normaloff>../../imagenes/iconosfox/Nuevo_registro_o_documento/30px-Crystal_Clear_app_List_manager.png</iconset>
+      <normaloff>../img/30px-Crystal_Clear_app_List_manager.png</normaloff>../img/30px-Crystal_Clear_app_List_manager.png</iconset>
     </property>
    </widget>
    <widget class="QPushButton" name="btnModificar">
@@ -481,7 +481,7 @@
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../../imagenes/iconosfox/Editar_o_modificar/30px-Crystal_Clear_app_kedit.png</normaloff>../../imagenes/iconosfox/Editar_o_modificar/30px-Crystal_Clear_app_kedit.png</iconset>
+      <normaloff>../img/40px-Crystal_Clear_app_kedit.png</normaloff>../img/40px-Crystal_Clear_app_kedit.png</iconset>
     </property>
    </widget>
    <widget class="QPushButton" name="btnEliminar">
@@ -501,7 +501,7 @@
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../../imagenes/iconosfox/Eliminar_registro_o_documento/30px_1 (514).png</normaloff>../../imagenes/iconosfox/Eliminar_registro_o_documento/30px_1 (514).png</iconset>
+      <normaloff>../img/30px_1 (514).png</normaloff>../img/30px_1 (514).png</iconset>
     </property>
    </widget>
    <widget class="QPushButton" name="btnLimpiar">
@@ -521,14 +521,14 @@
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../../imagenes/iconosfox/Eliminar_registro_o_documento/erase.png</normaloff>../../imagenes/iconosfox/Eliminar_registro_o_documento/erase.png</iconset>
+      <normaloff>../img/erase.png</normaloff>../img/erase.png</iconset>
     </property>
    </widget>
    <widget class="QPushButton" name="btnSalir">
     <property name="geometry">
      <rect>
       <x>510</x>
-      <y>-10</y>
+      <y>10</y>
       <width>91</width>
       <height>41</height>
      </rect>
@@ -541,7 +541,7 @@
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../../imagenes/iconosfox/Salir_o_desactivar/25px_exit.png</normaloff>../../imagenes/iconosfox/Salir_o_desactivar/25px_exit.png</iconset>
+      <normaloff>../img/25px_exit.png</normaloff>../img/25px_exit.png</iconset>
     </property>
    </widget>
   </widget>
@@ -978,24 +978,11 @@
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QTextEdit" name="txtId">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>30</y>
-      <width>51</width>
-      <height>27</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="lblId">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
+      <y>20</y>
       <width>62</width>
       <height>15</height>
      </rect>
@@ -1004,48 +991,55 @@
      <string>ID</string>
     </property>
    </widget>
-   <widget class="QTextEdit" name="txtNombres">
+   <widget class="QLineEdit" name="txtId">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>30</y>
-      <width>161</width>
-      <height>27</height>
+      <x>10</x>
+      <y>40</y>
+      <width>51</width>
+      <height>23</height>
      </rect>
     </property>
-    <property name="tabChangesFocus">
-     <bool>true</bool>
-    </property>
    </widget>
-   <widget class="QLabel" name="lblNombres">
+   <widget class="QLineEdit" name="txtNombre">
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>10</y>
+      <y>40</y>
+      <width>181</width>
+      <height>23</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblNombre">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>20</y>
       <width>62</width>
       <height>15</height>
      </rect>
     </property>
     <property name="text">
-     <string>Nombres</string>
+     <string>Nombre</string>
     </property>
    </widget>
-   <widget class="QTextEdit" name="txtDepartamento">
+   <widget class="QLineEdit" name="txtDepartamento">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>30</y>
-      <width>181</width>
-      <height>27</height>
+      <x>260</x>
+      <y>40</y>
+      <width>161</width>
+      <height>23</height>
      </rect>
     </property>
    </widget>
    <widget class="QLabel" name="lblDepartamento">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>10</y>
-      <width>111</width>
+      <x>260</x>
+      <y>20</y>
+      <width>121</width>
       <height>16</height>
      </rect>
     </property>
@@ -1053,27 +1047,27 @@
      <string>Departamento</string>
     </property>
    </widget>
-   <widget class="QTextEdit" name="txtTelefono">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>30</y>
-      <width>161</width>
-      <height>27</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="lblTelefono">
     <property name="geometry">
      <rect>
       <x>430</x>
-      <y>10</y>
-      <width>111</width>
-      <height>16</height>
+      <y>20</y>
+      <width>62</width>
+      <height>15</height>
      </rect>
     </property>
     <property name="text">
      <string>Telefono</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtTelefono">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>40</y>
+      <width>161</width>
+      <height>23</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -1083,7 +1077,7 @@
      <x>10</x>
      <y>170</y>
      <width>581</width>
-     <height>301</height>
+     <height>291</height>
     </rect>
    </property>
    <property name="palette">
@@ -1150,9 +1144,6 @@
      </disabled>
     </palette>
    </property>
-   <property name="alternatingRowColors">
-    <bool>true</bool>
-   </property>
    <property name="selectionMode">
     <enum>QAbstractItemView::SingleSelection</enum>
    </property>
@@ -1161,6 +1152,13 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>btnNuevo</tabstop>
+  <tabstop>btnModificar</tabstop>
+  <tabstop>btnEliminar</tabstop>
+  <tabstop>btnLimpiar</tabstop>
+  <tabstop>btnSalir</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -1228,14 +1226,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnSalir</sender>
-   <signal>clicked()</signal>
+   <sender>txtNombre</sender>
+   <signal>textChanged(QString)</signal>
    <receiver>Form</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>555</x>
-     <y>30</y>
+     <x>160</x>
+     <y>131</y>
     </hint>
     <hint type="destinationlabel">
      <x>300</x>
@@ -1244,18 +1242,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>txtNombres</sender>
-   <signal>textChanged()</signal>
-   <receiver>txtNombres</receiver>
-   <slot>clear()</slot>
+   <sender>txtNombre</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>Form</receiver>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>150</x>
-     <y>123</y>
+     <x>160</x>
+     <y>131</y>
     </hint>
     <hint type="destinationlabel">
-     <x>150</x>
-     <y>123</y>
+     <x>300</x>
+     <y>245</y>
     </hint>
    </hints>
   </connection>
