@@ -399,7 +399,9 @@ class Ui_Form(object):
         QtCore.QObject.connect(self.btnEliminar, QtCore.SIGNAL("clicked()"), Form.close)
         QtCore.QObject.connect(self.btnLimpiar, QtCore.SIGNAL("clicked()"), Form.close)
         QtCore.QObject.connect(self.txtNombre, QtCore.SIGNAL("textChanged(QString)"), self.Buscar)
-        QtCore.QObject.connect(self.txtNombre, QtCore.SIGNAL("textEdited(QString)"), self.GoFocus)
+        QtCore.QObject.connect(self.txtDepartamento, QtCore.SIGNAL("textChanged(QString)"), self.Buscar)
+        QtCore.QObject.connect(self.txtTelefono, QtCore.SIGNAL("textChanged(QString)"), self.Buscar)
+        
         QtCore.QMetaObject.connectSlotsByName(Form)
         Form.setTabOrder(self.btnNuevo, self.btnModificar)
         Form.setTabOrder(self.btnModificar, self.btnEliminar)
@@ -419,7 +421,8 @@ class Ui_Form(object):
         self.lblTelefono.setText(QtGui.QApplication.translate("Form", "Telefono", None, QtGui.QApplication.UnicodeUTF8))
 
         #Desde Aqui se inserta mi codigo
-        lista = self.obtener_datos(self)  # Obtener los registros de PostgreSQL
+        lista = self.Buscar()  # Obtener los registros de PostgreSQL
+        #print lista
         self.PrepararTableWidget(len(lista))  # Configurar el tableWidget
         self.InsertarRegistros(lista)  # Insertar los Registros en el TableWidget
 
@@ -484,13 +487,14 @@ class Ui_Form(object):
                 self.tableWidget.setItem(pos, posc, QtGui.QTableWidgetItem(str(columna)))
 
 
-    def obtener_datos(self, cadena=''):
+    def obtener_datos(self, cadena_pasada):
         host,  db, user, clave = fc.opcion_consultar('POSTGRESQL')
         cadconex = "host='%s' dbname='%s' user='%s' password='%s'" % (host[1], db[1], user[1], clave[1])
         try:
             pg = ConectarPG(cadconex)
-            cad_sql = "select id,nombre,departamento,telefono from agenda where del = 0 order by nombre"
-            self.registros = pg.ejecutar(cad_sql)
+            #cad_sql = "select id,nombre,departamento,telefono from agenda where del = 0 order by nombre"          
+            print cadena_pasada
+            self.registros = pg.ejecutar(cadena_pasada)
             pg.cur.close()
             pg.conn.close()
         except:
@@ -528,9 +532,20 @@ class Ui_Form(object):
         msgBox.exec_()
 
     def Buscar(self):
-        valor = self.txtNombre.text()
-        print valor
-        #msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Titulo', 'Prueba')
+        lcNombre = self.txtNombre.text()
+        lcDepartamento = self.txtDepartamento.text()
+        lcTelefono = self.txtTelefono.text()
+
+        valorNombre =  "upper(nombre) like '%%%s%%' AND " % (lcNombre.upper()) if lcNombre else ''
+        valorDepartamento =  " upper(departamento) like '%%%s%%' AND " % (lcDepartamento.upper()) if lcDepartamento else ''
+        valorTelefono = " telefono like '%%%s%%' AND " % (lcTelefono) if lcTelefono else ''
+
+        campos = valorNombre + valorDepartamento + valorTelefono
+        cadenaSql = 'select id,nombre,departamento,telefono from agenda where ' + campos + 'del = 0 order by nombre'
+        registros = self.obtener_datos(cadenaSql)
+        
+        return registros
+
 
     def Modificar(self):
         pass

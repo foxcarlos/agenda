@@ -1,0 +1,14 @@
+REATE TABLE agenda
+(
+  id bigserial NOT NULL,
+    del integer DEFAULT 0,
+      nombre character varying(100),
+        apellido character varying(100),
+          departamento character varying(50),
+            telefono character varying(20),
+              fechamodifi date DEFAULT now(),
+                estacion character varying(100),
+                  usuario character varying(100),
+                    ubicacion character varying(50),
+                      CONSTRAINT id_primary PRIMARY KEY (id )
+                      )
