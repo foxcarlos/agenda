@@ -404,8 +404,8 @@ class Ui_Form(object):
         self.retranslateUi(Form)
 
         #hasta aqui
-        QtCore.QObject.connect(self.btnNuevo, QtCore.SIGNAL("clicked()"), self.Nuevo)
-        QtCore.QObject.connect(self.btnModificar, QtCore.SIGNAL("clicked()"), self.Modificar)
+        QtCore.QObject.connect(self.btnNuevo, QtCore.SIGNAL("clicked()"), self.nuevoGuardar)
+        QtCore.QObject.connect(self.btnModificar, QtCore.SIGNAL("clicked()"), self.modificarGuardar)
         QtCore.QObject.connect(self.btnEliminar, QtCore.SIGNAL("clicked()"), self.Eliminar)
         QtCore.QObject.connect(self.btnDeshacer, QtCore.SIGNAL("clicked()"), self.Deshacer)
         QtCore.QObject.connect(self.btnLimpiar, QtCore.SIGNAL("clicked()"), self.limpiar_text)
@@ -440,21 +440,26 @@ class Ui_Form(object):
         self.lblDepartamento.setText(QtGui.QApplication.translate("Form", "Departamento", None, QtGui.QApplication.UnicodeUTF8))
         self.lblTelefono.setText(QtGui.QApplication.translate("Form", "Telefono", None, QtGui.QApplication.UnicodeUTF8))
 
+        self.main()
 
+
+    def main(self):
         host,  db, user, clave = fc.opcion_consultar('POSTGRESQL')
         self.cadconex = "host='%s' dbname='%s' user='%s' password='%s'" % (host[1], db[1], user[1], clave[1])
  
         self.activarBuscar = True
         self.banderaNuevo = True
+        self.banderaModificar = True
 
         self.Buscar()
         self.deshabilitar_botones()
 
     def Buscar(self):
         '''
+        Metodo que se utiliza para realizar la busqueda segun lo que
+        ingresa el usuario en las cajas de texto.
         '''
-        print self.activarBuscar
-
+        
         if self.activarBuscar:
             cadsq = self.armar_select()
             lista = self.obtener_datos(cadsq)
@@ -463,7 +468,9 @@ class Ui_Form(object):
 
     def armar_select(self):
         '''
-        
+        Metodo que permite armar la consulta select a medica que el usuario
+        va tecleando en los textbox
+        Parametro devuelto(1) String con la cadena sql de busqueda    
         '''
 
         lcNombre = self.txtNombre.text()
@@ -481,7 +488,7 @@ class Ui_Form(object):
     def PrepararTableWidget(self, CantidadReg=0):
         '''
         Meotod que permite asignar y ajustar  las columnas que tendra el tablewidget
-        basados en la cantodad de conlumnas y la cantidad de registros que le son
+        basados en la cantidad de conlumnas y la cantidad de registros que le son
         pasados como parametro
         #Ej: lista = ((0, 'Carlos Garcia', 'Sistemas', '41075'), (1, 'Nairesther Gomez', 'Docencia', '41075')) 
         '''
@@ -542,8 +549,7 @@ class Ui_Form(object):
         host,  db, user, clave = fc.opcion_consultar('POSTGRESQL')
         cadconex = "host='%s' dbname='%s' user='%s' password='%s'" % (host[1], db[1], user[1], clave[1])
         try:
-            pg = ConectarPG(cadconex)
-            #cad_sql = "select id,nombre,departamento,telefono from agenda where del = 0 order by nombre"          
+            pg = ConectarPG(cadconex)        
             print cadena_pasada
             self.registros = pg.ejecutar(cadena_pasada)
             pg.cur.close()
@@ -553,24 +559,17 @@ class Ui_Form(object):
         return self.registros
 
     def limpiar_text(self):
+        self.activarBuscar = True
         self.txtId.clear()
         self.txtNombre.clear()
         self.txtDepartamento.clear()
         self.txtTelefono.clear()
-        self.activarBuscar = True
+        self.deshabilitar_botones()
 
     def deshabilitar_botones(self):
         self.btnModificar.setEnabled(False)
         self.btnEliminar.setEnabled(False)
         self.btnDeshacer.setEnabled(False)
-
-    def deshabilitar(self):
-        self.txtId.setEnabled(False)
-        self.txtNombre.setEnabled(False)
-        self.txtDepartamento.setEnabled(False)
-        self.txtTelefono.setEnabled(False)
-
-        self.btnGuardar.setEnabled(False)
 
     def clickEnTabla(self):
         '''
@@ -580,7 +579,7 @@ class Ui_Form(object):
         '''
 
         self.activarBuscar = False
-        
+         
         fila = self.tableWidget.currentRow()
         #total_columnas = self.tableWidget.columnCount()
         
@@ -594,6 +593,9 @@ class Ui_Form(object):
         self.txtDepartamento.setText(dpto)
         self.txtTelefono.setText(tlf) 
 
+        self.btnModificar.setEnabled(True)
+        self.btnEliminar.setEnabled(True)
+
         '''
         for columna in range(total_columnas):
             itenactual = self.tableWidget.item(fila, columna)
@@ -601,7 +603,7 @@ class Ui_Form(object):
             #self.txtId.setText(c
         '''
 
-    def Nuevo(self):
+    def nuevoGuardar(self):
         '''
         El metodo nuevo cumple dos funciones, una es de boton nuevo y otra es de boton guardar,
         la Variables self.banderaNuevo es el swith que me permite saber cuando el 
@@ -616,6 +618,45 @@ class Ui_Form(object):
         '''
 
         if self.banderaNuevo:
+            self.habilitarNuevo(True)
+        else:
+            self.habilitarNuevo(False)
+            
+            #Ejecurar sentencia SQL para guardar en PostGreSQL
+            nombre = self.txtNombre.text()
+            dpto = self.txtDepartamento.text()
+            telf = self.txtTelefono.text()
+
+            sqlInsert = " insert into agenda (nombre, departamento, telefono) values ('%s', '%s', '%s') " % (nombre, dpto, telf)
+            
+            try:
+                pg = ConectarPG(self.cadconex)
+                pg.ejecutar(sqlInsert)
+                pg.conn.commit()
+
+                lcMensaje = 'Registro Guardaro Satisfactoriamente'  # self.combo.currentText()
+                msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Felicidades',lcMensaje)
+                msgBox.exec_()
+            except:
+                print exceptionValue
+
+
+    def habilitarNuevo(self,nuevo):
+        ''' 
+        Este metodo permite habilitar o deshabilitar el Boton Nuevo segun sea el caso.
+        *- Cuando se presiona el boton nuevo por primera vez este cambia para Boton Guardar asi como  
+        tanmbien el icono y el texto del boton y desabilita el resto de los 
+        botonos, dejando solo el boton Guardar,deshacer y salir
+        
+        *- Cuando es caso contrario, es decir cuando el Boton Nuevo hace la funcion de Guardar
+        etonces se restaura todo como al principio dandole la apariencia de Boton Nuevo, tanto el 
+        icono como el texto del boton 
+        '''
+        
+        if nuevo:
+            '''
+            Se presiono el Boton Nuevo
+            '''
             #Limpar los TextBox
             self.limpiar_text()
 
@@ -639,15 +680,18 @@ class Ui_Form(object):
             icon1.addPixmap(QtGui.QPixmap("img/40px_3floppy_unmount.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
             self.btnNuevo.setIcon(icon1)
 
-            self.txtNombre.setFocus()
-
+            self.txtNombre.setFocus()      
         else:
+            '''
+            Se presiono el Boton Guardar
+            '''
+
             #Activar la Busqueda al escribir el los textbox
             self.activarBuscar = True
-
-            #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo o Como Boton Guardar
+        
+            #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo
             self.banderaNuevo = True
-            
+
             #Deshabilitar y Habilitar botonoes
             self.btnModificar.setEnabled(False)
             self.btnEliminar.setEnabled(False)
@@ -656,23 +700,37 @@ class Ui_Form(object):
 
             #Cambiar el Caption o Text del Boton
             self.btnNuevo.setText("&Nuevo")
- 
+            
             #Cambiar icono del Boton Nuevo  de Guardar por Nuevo
             icon1 = QtGui.QIcon()
             icon1.addPixmap(QtGui.QPixmap("img/30px-Crystal_Clear_app_List_manager.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
             self.btnNuevo.setIcon(icon1)
 
+    def modificarGuardar(self):
+        '''
+        El metodo modificarGuardar cumple dos funciones, una es de boton Modificar y otra es de boton guardar,
+        la Variables self.banderaModificar es el swith que me permite saber cuando el 
+        boton Modificar hace la funcion de Modificar o de guardar, cuando la variable
+        banderaModificar es True entonces el boton debe actuar como Boton Guardar de
+        lo contrario cuando banderaModificar es false entonces el boton nuevo debe 
+        actuar como boton Guardar
+        '''
+
+        if self.banderaModificar:
+            self.habilitarModificar(True)
+        else:            
             #Ejecurar sentencia SQL para guardar en PostGreSQL
+            id = self.txtId.text()
             nombre = self.txtNombre.text()
             dpto = self.txtDepartamento.text()
             telf = self.txtTelefono.text()
 
-            sqlInsert = " insert into agenda (nombre, departamento, telefono) values ('%s', '%s', '%s') " % (nombre, dpto, telf)
-            
+            sqlUpdate = " update agenda set nombre = '%s', departamento = '%s', telefono = '%s' where id = %s " % (nombre, dpto, telf, id)
+            print sqlUpdate
+
             try:
                 pg = ConectarPG(self.cadconex)
-                print sqlInsert
-                pg.ejecutar(sqlInsert)
+                pg.ejecutar(sqlUpdate)
                 pg.conn.commit()
 
                 lcMensaje = 'Registro Guardaro Satisfactoriamente'  # self.combo.currentText()
@@ -680,8 +738,91 @@ class Ui_Form(object):
                 msgBox.exec_()
             except:
                 print exceptionValue
+            
+            #Restaurar los Botones a si normalidad
+            self.habilitarModificar(False)
 
-    def Guardar(self):
+
+    def habilitarModificar(self,modificar):
+        ''' 
+        Este metodo permite habilitar o deshabilitar el Boton Modificar segun sea el caso.
+        *- Cuando se presiona el boton Modificar por primera vez este cambia para Boton Guardar asi como  
+        tanmbien el icono y el texto del boton y desabilita el resto de los 
+        botonos, dejando solo el boton Guardar,deshacer y salir
+        
+        *- Cuando es caso contrario, es decir cuando el Boton Modificar hace la funcion de Guardar
+        entonces se restaura todo como al principio dandole la apariencia de Boton Modificar, tanto el 
+        icono como el texto del boton 
+        '''
+        
+        if modificar:
+            '''
+            Se presiono el Boton Modificar
+            '''
+            #Desactivar la Busqueda al escribir el los textbox
+            self.activarBuscar = False
+
+            #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo o Como Boton Guardar
+            self.banderaModificar = False
+            
+            #Deshabilitar y Habilitar botonoes y TextBox
+            self.txtId.setEnabled(False)
+
+            self.btnNuevo.setEnabled(False)
+            self.btnEliminar.setEnabled(False)
+            self.btnLimpiar.setEnabled(False)
+            self.btnDeshacer.setEnabled(True)
+            
+            #Cambiar el Caption o Text del Boton
+            self.btnModificar.setText("&Guardar")
+            
+            #Cambiar icono del Boton Nuevo  de Nuevo por Guardar
+            icon1 = QtGui.QIcon()
+            icon1.addPixmap(QtGui.QPixmap("img/40px_3floppy_unmount.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            self.btnModificar.setIcon(icon1)
+
+            self.txtNombre.setFocus()
+        else:
+            '''
+            Se presiono el Boton Guardar
+            '''
+
+            #Limpar los TextBox
+            self.limpiar_text()
+
+            #Activar la Busqueda al escribir el los textbox
+            self.activarBuscar = True
+        
+            #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo
+            self.banderaModificar = True
+
+            #Deshabilitar y Habilitar botonoes
+            self.btnNuevo.setEnabled(True)
+            #self.btnModificar.setEnabled(False)
+            self.btnEliminar.setEnabled(False)
+            self.btnLimpiar.setEnabled(True)
+            self.btnDeshacer.setEnabled(False)
+
+            #Cambiar el Caption o Text del Boton
+            self.btnModificar.setText("&Modificar")
+            
+            #Cambiar icono del Boton Modificar de Guardar por Modificar
+            icon1 = QtGui.QIcon()
+            icon1.addPixmap(QtGui.QPixmap("img/40px-Crystal_Clear_app_kedit.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            self.btnModificar.setIcon(icon1)
+
+
+
+    def Eliminar(self):
+        pass
+
+    def Deshacer(self):
+        self.habilitarNuevo(False)
+
+    def salir(self):
+        pass
+
+    def borrar(self):
         msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Titulo', 'Prueba')
         #msgBox.setStandardButtons(QtGui.QMessageBox.Save | QtGui.QMessageBox.Discard | QtGui.QMessageBox.Cancel)
         GuardarButton = msgBox.addButton("Guardar", QtGui.QMessageBox.ActionRole)
@@ -694,18 +835,6 @@ class Ui_Form(object):
         lcMensaje = 'Hola'  # self.combo.currentText()
         msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Titulo',lcMensaje)
         msgBox.exec_()
-
-    def Modificar(self):
-        pass
-
-    def Eliminar(self):
-        pass
-
-    def Deshacer(self):
-        pass
-
-    def salir(self):
-        pass
 
 
 class ControlMainWindow(QtGui.QMainWindow):
