@@ -406,8 +406,8 @@ class Ui_Form(object):
         #hasta aqui
         QtCore.QObject.connect(self.btnNuevo, QtCore.SIGNAL("clicked()"), self.nuevoGuardar)
         QtCore.QObject.connect(self.btnModificar, QtCore.SIGNAL("clicked()"), self.modificarGuardar)
-        QtCore.QObject.connect(self.btnEliminar, QtCore.SIGNAL("clicked()"), self.Eliminar)
-        QtCore.QObject.connect(self.btnDeshacer, QtCore.SIGNAL("clicked()"), self.Deshacer)
+        QtCore.QObject.connect(self.btnEliminar, QtCore.SIGNAL("clicked()"), self.preguntarEliminar)
+        QtCore.QObject.connect(self.btnDeshacer, QtCore.SIGNAL("clicked()"), self.iniciarForm)
         QtCore.QObject.connect(self.btnLimpiar, QtCore.SIGNAL("clicked()"), self.limpiar_text)
         QtCore.QObject.connect(self.btnSalir, QtCore.SIGNAL("clicked()"), Form.close)
         QtCore.QObject.connect(self.txtNombre, QtCore.SIGNAL("textChanged(QString)"), self.Buscar)
@@ -446,13 +446,42 @@ class Ui_Form(object):
     def main(self):
         host,  db, user, clave = fc.opcion_consultar('POSTGRESQL')
         self.cadconex = "host='%s' dbname='%s' user='%s' password='%s'" % (host[1], db[1], user[1], clave[1])
- 
+
+        self.iniciarForm()
+        self.Buscar()
+
+    def iniciarForm(self):
+        '''
+        '''
+
+        #Activar la Busqueda al escribir el los textbox
         self.activarBuscar = True
+
+        #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo
         self.banderaNuevo = True
         self.banderaModificar = True
 
-        self.Buscar()
-        self.deshabilitar_botones()
+        #Deshabilitar y Habilitar botones
+        self.btnNuevo.setEnabled(True)
+        self.btnModificar.setEnabled(False)
+        self.btnEliminar.setEnabled(False)
+        self.btnLimpiar.setEnabled(True)
+        self.btnDeshacer.setEnabled(False)
+        self.btnSalir.setEnabled(True)
+
+        #Cambiar el Caption o Text del Boton
+        self.btnNuevo.setText("&Nuevo")
+        self.btnModificar.setText('&Modificar')
+
+        #Cambiar icono del Boton Nuevo por Nuevo
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("img/30px-Crystal_Clear_app_List_manager.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnNuevo.setIcon(icon1)
+        
+        #Cambiar icono del Boton Modificar por Modificar
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("img/40px-Crystal_Clear_app_kedit.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnModificar.setIcon(icon2)
 
     def Buscar(self):
         '''
@@ -546,11 +575,17 @@ class Ui_Form(object):
                 self.tableWidget.setItem(pos, posc, QtGui.QTableWidgetItem(str(columna)))
 
     def obtener_datos(self, cadena_pasada):
-        host,  db, user, clave = fc.opcion_consultar('POSTGRESQL')
-        cadconex = "host='%s' dbname='%s' user='%s' password='%s'" % (host[1], db[1], user[1], clave[1])
+        '''
+        Ejecuta la Consulta SQl a el servidor PostGreSQL segun la cadena SQL
+        pasada como parametro
+        parametros recibidos: (1) String
+        parametros devueltos: (1) Lista
+
+        Ej: obtener_datos('select *from tabla where condicion')
+        '''
+
         try:
-            pg = ConectarPG(cadconex)        
-            print cadena_pasada
+            pg = ConectarPG(self.cadconex)
             self.registros = pg.ejecutar(cadena_pasada)
             pg.cur.close()
             pg.conn.close()
@@ -559,17 +594,14 @@ class Ui_Form(object):
         return self.registros
 
     def limpiar_text(self):
-        self.activarBuscar = True
+        '''
+        Limpia los QlineEdit o Textbox
+        '''
         self.txtId.clear()
         self.txtNombre.clear()
         self.txtDepartamento.clear()
         self.txtTelefono.clear()
-        self.deshabilitar_botones()
-
-    def deshabilitar_botones(self):
-        self.btnModificar.setEnabled(False)
-        self.btnEliminar.setEnabled(False)
-        self.btnDeshacer.setEnabled(False)
+        self.iniciarForm()
 
     def clickEnTabla(self):
         '''
@@ -596,13 +628,6 @@ class Ui_Form(object):
         self.btnModificar.setEnabled(True)
         self.btnEliminar.setEnabled(True)
 
-        '''
-        for columna in range(total_columnas):
-            itenactual = self.tableWidget.item(fila, columna)
-            c = itenactual.text()
-            #self.txtId.setText(c
-        '''
-
     def nuevoGuardar(self):
         '''
         El metodo nuevo cumple dos funciones, una es de boton nuevo y otra es de boton guardar,
@@ -618,10 +643,9 @@ class Ui_Form(object):
         '''
 
         if self.banderaNuevo:
-            self.habilitarNuevo(True)
+            #Prepara los Botones
+            self.habilitarNuevo()
         else:
-            self.habilitarNuevo(False)
-            
             #Ejecurar sentencia SQL para guardar en PostGreSQL
             nombre = self.txtNombre.text()
             dpto = self.txtDepartamento.text()
@@ -635,76 +659,47 @@ class Ui_Form(object):
                 pg.conn.commit()
 
                 lcMensaje = 'Registro Guardaro Satisfactoriamente'  # self.combo.currentText()
-                msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Felicidades',lcMensaje)
+                msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Information, 'Felicidades',lcMensaje)
                 msgBox.exec_()
             except:
                 print exceptionValue
-
-
-    def habilitarNuevo(self,nuevo):
-        ''' 
-        Este metodo permite habilitar o deshabilitar el Boton Nuevo segun sea el caso.
-        *- Cuando se presiona el boton nuevo por primera vez este cambia para Boton Guardar asi como  
-        tanmbien el icono y el texto del boton y desabilita el resto de los 
-        botonos, dejando solo el boton Guardar,deshacer y salir
-        
-        *- Cuando es caso contrario, es decir cuando el Boton Nuevo hace la funcion de Guardar
-        etonces se restaura todo como al principio dandole la apariencia de Boton Nuevo, tanto el 
-        icono como el texto del boton 
-        '''
-        
-        if nuevo:
-            '''
-            Se presiono el Boton Nuevo
-            '''
-            #Limpar los TextBox
+            
+            #Restaurar todos los Iconos y Botones
+            self.iniciarForm()
             self.limpiar_text()
 
-            #Desactivar la Busqueda al escribir el los textbox
-            self.activarBuscar = False
 
-            #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo o Como Boton Guardar
-            self.banderaNuevo = False
+    def habilitarNuevo(self):
+        ''' 
+         Este metodo permite preparar los botones, los text y los iconos.
+         Cuando se presiona el boton nuevo por primera vez este cambia para Boton Guardar asi como  
+         tanmbien el icono y el texto del boton y desabilita el resto de los botonos, dejando solo 
+         el boton Guardar,deshacer y salir
+        '''
+
+        #Limpar los TextBox
+        self.limpiar_text()
+
+        #Desactivar la Busqueda al escribir el los textbox
+        self.activarBuscar = False
+
+        #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo o Como Boton Guardar
+        self.banderaNuevo = False
+
+        #Deshabilitar y Habilitar botonoes
+        self.btnModificar.setEnabled(False)
+        self.btnEliminar.setEnabled(False)
+        self.btnLimpiar.setEnabled(False)
+        self.btnDeshacer.setEnabled(True)
             
-            #Deshabilitar y Habilitar botonoes
-            self.btnModificar.setEnabled(False)
-            self.btnEliminar.setEnabled(False)
-            self.btnLimpiar.setEnabled(False)
-            self.btnDeshacer.setEnabled(True)
+        #Cambiar el Caption o Text del Boton
+        self.btnNuevo.setText("&Guardar")
             
-            #Cambiar el Caption o Text del Boton
-            self.btnNuevo.setText("&Guardar")
-            
-            #Cambiar icono del Boton Nuevo  de Nuevo por Guardar
-            icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("img/40px_3floppy_unmount.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.btnNuevo.setIcon(icon1)
-
-            self.txtNombre.setFocus()      
-        else:
-            '''
-            Se presiono el Boton Guardar
-            '''
-
-            #Activar la Busqueda al escribir el los textbox
-            self.activarBuscar = True
-        
-            #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo
-            self.banderaNuevo = True
-
-            #Deshabilitar y Habilitar botonoes
-            self.btnModificar.setEnabled(False)
-            self.btnEliminar.setEnabled(False)
-            self.btnLimpiar.setEnabled(True)
-            self.btnDeshacer.setEnabled(False)
-
-            #Cambiar el Caption o Text del Boton
-            self.btnNuevo.setText("&Nuevo")
-            
-            #Cambiar icono del Boton Nuevo  de Guardar por Nuevo
-            icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("img/30px-Crystal_Clear_app_List_manager.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.btnNuevo.setIcon(icon1)
+        #Cambiar icono del Boton Nuevo  de Nuevo por Guardar
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("img/40px_3floppy_unmount.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnNuevo.setIcon(icon1)
+        self.txtNombre.setFocus()
 
     def modificarGuardar(self):
         '''
@@ -717,7 +712,8 @@ class Ui_Form(object):
         '''
 
         if self.banderaModificar:
-            self.habilitarModificar(True)
+            #Prepara los Botones
+            self.habilitarModificar()
         else:            
             #Ejecurar sentencia SQL para guardar en PostGreSQL
             id = self.txtId.text()
@@ -734,90 +730,89 @@ class Ui_Form(object):
                 pg.conn.commit()
 
                 lcMensaje = 'Registro Guardaro Satisfactoriamente'  # self.combo.currentText()
-                msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Felicidades',lcMensaje)
+                msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Information, 'Felicidades',lcMensaje)
                 msgBox.exec_()
             except:
                 print exceptionValue
             
-            #Restaurar los Botones a si normalidad
-            self.habilitarModificar(False)
-
-
-    def habilitarModificar(self,modificar):
-        ''' 
-        Este metodo permite habilitar o deshabilitar el Boton Modificar segun sea el caso.
-        *- Cuando se presiona el boton Modificar por primera vez este cambia para Boton Guardar asi como  
-        tanmbien el icono y el texto del boton y desabilita el resto de los 
-        botonos, dejando solo el boton Guardar,deshacer y salir
-        
-        *- Cuando es caso contrario, es decir cuando el Boton Modificar hace la funcion de Guardar
-        entonces se restaura todo como al principio dandole la apariencia de Boton Modificar, tanto el 
-        icono como el texto del boton 
-        '''
-        
-        if modificar:
-            '''
-            Se presiono el Boton Modificar
-            '''
-            #Desactivar la Busqueda al escribir el los textbox
-            self.activarBuscar = False
-
-            #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo o Como Boton Guardar
-            self.banderaModificar = False
-            
-            #Deshabilitar y Habilitar botonoes y TextBox
-            self.txtId.setEnabled(False)
-
-            self.btnNuevo.setEnabled(False)
-            self.btnEliminar.setEnabled(False)
-            self.btnLimpiar.setEnabled(False)
-            self.btnDeshacer.setEnabled(True)
-            
-            #Cambiar el Caption o Text del Boton
-            self.btnModificar.setText("&Guardar")
-            
-            #Cambiar icono del Boton Nuevo  de Nuevo por Guardar
-            icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("img/40px_3floppy_unmount.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.btnModificar.setIcon(icon1)
-
-            self.txtNombre.setFocus()
-        else:
-            '''
-            Se presiono el Boton Guardar
-            '''
-
-            #Limpar los TextBox
+            #Restaurar los Botones a su normalidad
+            self.iniciarForm()
             self.limpiar_text()
 
-            #Activar la Busqueda al escribir el los textbox
-            self.activarBuscar = True
-        
-            #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo
-            self.banderaModificar = True
 
-            #Deshabilitar y Habilitar botonoes
-            self.btnNuevo.setEnabled(True)
-            #self.btnModificar.setEnabled(False)
-            self.btnEliminar.setEnabled(False)
-            self.btnLimpiar.setEnabled(True)
-            self.btnDeshacer.setEnabled(False)
+    def habilitarModificar(self):
+        ''' 
+         Este metodo permite habilitar el Boton Modificar.
+         Cuando se presiona el boton Modificar por primera vez este cambia para Boton Guardar asi como  
+         tanmbien el icono y el texto del boton y desabilita el resto de los botonos, dejando solo el 
+         boton Guardar,deshacer y salir
+        '''
 
-            #Cambiar el Caption o Text del Boton
-            self.btnModificar.setText("&Modificar")
+        #Desactivar la Busqueda al escribir el los QlineEdit o TextBox
+        self.activarBuscar = False
+
+        #Activar Bandera para saber cuando el boton Nuevo funciona como Boton Nuevo o Como Boton Guardar
+        self.banderaModificar = False
             
-            #Cambiar icono del Boton Modificar de Guardar por Modificar
-            icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("img/40px-Crystal_Clear_app_kedit.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.btnModificar.setIcon(icon1)
+        #Deshabilitar y Habilitar botonoes y TextBox
+        self.txtId.setEnabled(False)
 
+        self.btnNuevo.setEnabled(False)
+        self.btnEliminar.setEnabled(False)
+        self.btnLimpiar.setEnabled(False)
+        self.btnDeshacer.setEnabled(True)
+            
+        #Cambiar el Caption o Text del Boton
+        self.btnModificar.setText("&Guardar")
+            
+        #Cambiar icono del Boton Nuevo  de Nuevo por Guardar
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("img/40px_3floppy_unmount.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnModificar.setIcon(icon1)
+        self.txtNombre.setFocus()
 
+    def preguntarEliminar(self):
+        '''
+        Metodo que permite Consultar si se desea eliminar un registro de la Agenda
+        '''
+        msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Question, 'Informacion', 'Este Registro sera Eliminado')
+        msgBox.setInformativeText(u"¿Esta Seguro que desea eliminar este registro?")
+        
+        GuardarButton = msgBox.addButton("&Aceptar", QtGui.QMessageBox.ActionRole)
+        CancelarButton = msgBox.addButton("&Cancelar", QtGui.QMessageBox.ActionRole)
+        msgBox.exec_()
+        
+        if msgBox.clickedButton() == GuardarButton:
+            print 'Aceptar'
+            self.eliminar()
+        
+        elif msgBox.clickedButton() == CancelarButton:
+            #print 'Cancelar'
+            pass
 
-    def Eliminar(self):
-        pass
+    def eliminar(self):
+        '''
+        Metodo que permite eliminar de la base de datos un registro de la agenda
+        '''
+        
+        id = self.txtId.text()
+        sqlDelete = " update agenda set del = 1 where id = %s " % (id)
+        print sqlDelete
 
-    def Deshacer(self):
-        self.habilitarNuevo(False)
+        try:
+            pg = ConectarPG(self.cadconex)
+            pg.ejecutar(sqlDelete)
+            pg.conn.commit()
+
+            lcMensaje = 'Registro Eliminado Satisfactoriamente'
+            msgBox = QtGui.QMessageBox(QtGui.QMessageBox.Information, 'Felicidades',lcMensaje)
+            msgBox.exec_()
+        except:
+            print exceptionValue
+        
+        #Restaurar los Botones a su normalidad
+        self.iniciarForm()
+        self.limpiar_text()
 
     def salir(self):
         pass
