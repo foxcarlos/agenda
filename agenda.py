@@ -20,7 +20,7 @@ class Ui_Form(object):
         Form.setObjectName("Form")
         Form.resize(602, 491)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("img/agenda.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("img/kdmconfig.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Form.setWindowIcon(icon)
         self.widget = QtGui.QWidget(Form)
         self.widget.setGeometry(QtCore.QRect(0, 0, 611, 61))
@@ -482,6 +482,14 @@ class Ui_Form(object):
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap("img/40px-Crystal_Clear_app_kedit.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnModificar.setIcon(icon2)
+
+        if sys.platform == 'win32':
+            self.btnNuevo.setIconSize(QtCore.QSize(45, 45))
+            self.btnModificar.setIconSize(QtCore.QSize(35, 35))
+            self.btnEliminar.setIconSize(QtCore.QSize(35, 35))
+            self.btnLimpiar.setIconSize(QtCore.QSize(35, 35))
+            self.btnDeshacer.setIconSize(QtCore.QSize(35, 35))
+            self.btnSalir.setIconSize(QtCore.QSize(35, 35))
 
     def Buscar(self):
         '''

@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>img/agenda.ico</normaloff>img/agenda.ico</iconset>
+    <normaloff>../img/kdmconfig.png</normaloff>../img/kdmconfig.png</iconset>
   </property>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
